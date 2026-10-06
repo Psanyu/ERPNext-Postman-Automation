@@ -1,0 +1,4 @@
+ERPNextQA.postman_environment.json
+node_modules/
+newman/
+*.html

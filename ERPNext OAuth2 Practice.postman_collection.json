@@ -1,0 +1,706 @@
+{
+  "info": {
+    "_postman_id": "aa9fc2ba-1b63-414e-b266-59ef7591750a",
+    "name": "ERPNext OAuth2 Practice",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53698986",
+    "_collection_link": "https://go.postman.co/collection/53698986-aa9fc2ba-1b63-414e-b266-59ef7591750a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Get Authorization Code",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\r\n\r\nverifyStatus(200);\r\n\r\npm.test(\"Authorization page is returned\", function () {\r\n    const body = pm.response.text();\r\n    // Postman (logged in) gets the consent screen; Newman (no session) gets the login page.\r\n    const isConsent = body.includes(\"Confirm Access\");\r\n    const isLogin = /login/i.test(body);\r\n    pm.expect(isConsent || isLogin, \"neither consent nor login page found\").to.be.true;\r\n});\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"state\", pm.variables.replaceIn(\"{{$randomUUID}}\"));\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "clientId",
+              "value": "{{clientId}}",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "{{token_url}}",
+              "type": "string"
+            },
+            {
+              "key": "authUrl",
+              "value": "{{auth_url}}",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "ERPNext OAuth Token",
+              "type": "string"
+            },
+            {
+              "key": "tokenType",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "{{clientSecret}}",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "{{scope}}",
+              "type": "string"
+            },
+            {
+              "key": "state",
+              "value": "{{state}}",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "body",
+              "type": "string"
+            },
+            {
+              "key": "redirect_uri",
+              "value": "{{callbackUrl}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/method/frappe.integrations.oauth2.authorize?client_id={{clientId}}&response_type=code&redirect_uri={{callbackUrl}}&scope={{scope}}&state={{state}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "method",
+            "frappe.integrations.oauth2.authorize"
+          ],
+          "query": [
+            {
+              "key": "client_id",
+              "value": "{{clientId}}"
+            },
+            {
+              "key": "response_type",
+              "value": "code"
+            },
+            {
+              "key": "redirect_uri",
+              "value": "{{callbackUrl}}"
+            },
+            {
+              "key": "scope",
+              "value": "{{scope}}"
+            },
+            {
+              "key": "state",
+              "value": "{{state}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "02 - Get ERPNext Customers",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\nverifyStatus(200);\nverifyJsonResponse();\n\nconst jsonData = getJsonData();\n\npm.test(\"Response contains customer data\", function () {\n    pm.expect(jsonData).to.have.property(\"data\");\n});\n\npm.test(\"Each customer has a name\", function () {\n    jsonData.data.forEach(function (c) {\n        pm.expect(c).to.have.property(\"name\");\n    });\n});"
+            ]
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "clientId",
+              "value": "{{clientId}}",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "{{token_url}}",
+              "type": "string"
+            },
+            {
+              "key": "authUrl",
+              "value": "{{auth_url}}",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "ERPNext OAuth Token",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "{{clientSecret}}",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "{{scope}}",
+              "type": "string"
+            },
+            {
+              "key": "state",
+              "value": "{{state}}",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "body",
+              "type": "string"
+            },
+            {
+              "key": "redirect_uri",
+              "value": "{{callbackUrl}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "03 - POST New Auth",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\r\n\r\npm.collectionVariables.unset(\"createdCustomerName\");\r\n\r\nverifyStatus(200);\r\nverifyJsonResponse();\r\n\r\nconst jsonData = getJsonData();\r\n\r\nconst expected = {\r\n    customer_name:  pm.variables.get(\"customerName\"),\r\n    customer_type:  pm.variables.get(\"customerType\"),\r\n    customer_group: pm.variables.get(\"customerGroup\"),\r\n    territory:      pm.variables.get(\"territory\")\r\n};\r\n\r\npm.test(\"Iteration data is present (data file attached)\", function () {\r\n    Object.keys(expected).forEach(function (key) {\r\n        pm.expect(expected[key], key + \" missing from data file\").to.not.be.undefined;\r\n    });\r\n});\r\n\r\npm.test(\"Response contains customer data object\", function () {\r\n    pm.expect(jsonData, \"response body\").to.be.an(\"object\");\r\n    pm.expect(jsonData.data, \"jsonData.data\").to.be.an(\"object\");\r\n});\r\n\r\nif (pm.response.code === 200 && jsonData && jsonData.data) {\r\n\r\n    pm.test(\"Created customer has a name\", function () {\r\n        pm.expect(jsonData.data.name).to.be.a(\"string\").and.not.empty;\r\n    });\r\n\r\n    // Only store the name once we know the response is good\r\n    pm.collectionVariables.set(\"createdCustomerName\", jsonData.data.name);\r\n\r\n    Object.keys(expected).forEach(function (key) {\r\n        pm.test(key + \" is correct\", function () {\r\n            pm.expect(jsonData.data[key]).to.eql(expected[key]);\r\n        });\r\n    });\r\n}"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customer_name\": \"{{customerName}}\",\r\n  \"customer_type\": \"{{customerType}}\",\r\n  \"customer_group\": \"{{customerGroup}}\",\r\n  \"territory\": \"{{territory}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "04 - Get Customer By Name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Customer data is not null\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.data).to.not.be.null;\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer/{{createdCustomerName}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer",
+            "{{createdCustomerName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "05 - Update Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Customer data is not null\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.data).to.not.be.null;\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"territory\": \"{{updatedTerritory}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer/{{createdCustomerName}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer",
+            "{{createdCustomerName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "06 - Delete Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\npm.test(\"Status code is 202\", function () {\n    pm.response.to.have.status(202);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer/{{createdCustomerName}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer",
+            "{{createdCustomerName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "07 - Verify Deleted Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\r\n\r\npm.test(\"createdCustomerName is set (did 03 succeed?)\", function(){\r\n   pm.expect(pm.collectionVariables.get(\"createdCustomerName\")).to.be.a(\"string\").and.not.be.empty; \r\n    });\r\n\r\nverifyStatus(404);\r\nverifyJsonResponse();\r\nverifyExceptionType(\"DoesNotExistError\");\r\n\r\n\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer/{{createdCustomerName}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer",
+            "{{createdCustomerName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "08 - POST Customer Missing Required Field",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\npm.test(\"Status code is 500\", function () {\n    pm.response.to.have.status(500);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Exception type is AttributeError\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData.exc_type).to.eql(\"AttributeError\");\n});\n\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customer_type\": \"{{customerType}}\",\r\n  \"customer_group\": \"{{customerGroup}}\",\r\n  \"territory\": \"{{territory}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "09 - GET Customers Without Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\r\n\r\nverifyStatus(403);\r\nverifyJsonResponse();\r\nverifyExceptionType(\"PermissionError\");\r\n\r\n"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "10 - GET Customers Invalid Token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "eval(pm.variables.get(\"apiHelpersCode\"));\n\npm.test(\"Status code is 401 or 403\", function () {\n    pm.expect(pm.response.code).to.be.oneOf([401, 403]);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\npm.test(\"Response indicates an auth error\", function () {\n    const j = pm.response.json();\n    pm.expect(j.exc_type).to.be.oneOf([\"AuthenticationError\", \"PermissionError\"]);\n});"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const names = [\"OAuth DD Customer 01\", \"OAuth DD Customer 02\", \"OAuth DD Customer 03\"];\r\nconst i = pm.info.iteration % names.length;\r\npm.collectionVariables.set(\"customerName\", names[i]);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "invalid_token_123",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/resource/Customer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resource",
+            "Customer"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "const apiHelpersCode = `\r",
+          "\r",
+          "function verifyStatus(expectedStatus) {\r",
+          "    pm.test(\\`Status code is \\${expectedStatus}\\`, function () {\r",
+          "        pm.response.to.have.status(expectedStatus);\r",
+          "    });\r",
+          "}\r",
+          "\r",
+          "function verifyJsonResponse() {\r",
+          "    pm.test(\"Response is JSON\", function () {\r",
+          "        pm.response.to.be.json;\r",
+          "    });\r",
+          "}\r",
+          "\r",
+          "function getJsonData() {\r",
+          "    return pm.response.json();\r",
+          "}\r",
+          "\r",
+          "function verifyExceptionType(expectedType) {\r",
+          "    const jsonData = getJsonData();\r",
+          "\r",
+          "    pm.test(\\`Exception type is \\${expectedType}\\`, function () {\r",
+          "        pm.expect(jsonData).to.have.property(\"exc_type\");\r",
+          "        pm.expect(jsonData.exc_type).to.eql(expectedType);\r",
+          "    });\r",
+          "}\r",
+          "\r",
+          "function verifyDataNotNull() {\r",
+          "    const jsonData = getJsonData();\r",
+          "\r",
+          "    pm.test(\"Customer data is not null\", function () {\r",
+          "        pm.expect(jsonData).to.have.property(\"data\");\r",
+          "        pm.expect(jsonData.data).to.not.be.null;\r",
+          "    });\r",
+          "}\r",
+          "\r",
+          "function verifyDataArray() {\r",
+          "    const jsonData = getJsonData();\r",
+          "\r",
+          "    pm.test(\"Response contains customer data\", function () {\r",
+          "        pm.expect(jsonData).to.have.property(\"data\");\r",
+          "        pm.expect(jsonData.data).to.be.an(\"array\");\r",
+          "        pm.expect(jsonData.data.length).to.be.above(0);\r",
+          "    });\r",
+          "}\r",
+          "`;\r",
+          "\r",
+          "pm.variables.set(\"apiHelpersCode\", apiHelpersCode);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "customerName",
+      "value": ""
+    },
+    {
+      "key": "customerType",
+      "value": ""
+    },
+    {
+      "key": "customerGroup",
+      "value": ""
+    },
+    {
+      "key": "territory",
+      "value": ""
+    },
+    {
+      "key": "updatedTerritory",
+      "value": ""
+    },
+    {
+      "key": "state",
+      "value": ""
+    },
+    {
+      "key": "createdCustomerName",
+      "value": ""
+    }
+  ]
+}
