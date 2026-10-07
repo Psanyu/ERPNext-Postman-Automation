@@ -37,6 +37,33 @@ pipeline {
                 }
             }
         }
+
+        stage('Push Test Report to GitHub') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'github-erpnext-push',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN'
+                    )
+                ]) {
+                    bat '''
+                    git config user.name "Jenkins"
+                    git config user.email "jenkins@localhost"
+
+                    git add -f reports/newman-results.xml
+
+                    git diff --cached --quiet
+                    if errorlevel 1 (
+                        git commit -m "Update Newman API test results - Jenkins build %BUILD_NUMBER%"
+                        git push https://%GIT_USER%:%GIT_TOKEN%@github.com/Psanyu/ERPNext-Postman-Automation.git HEAD:main
+                    ) else (
+                        echo No report changes to commit.
+                    )
+                    '''
+                }
+            }
+        }
     }
 
     post {
