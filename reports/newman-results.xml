@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="ERPNext OAuth2 Practice" tests="8" time="0.443">
+  <testsuite name="03 - POST New Auth" id="7580a140-f8a9-4eeb-9cab-b2ec4904fbc8" timestamp="2026-10-07T08:32:39.030Z" tests="9" failures="0" errors="0" time="0.079">
+    <testcase name="Status code is 200" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="Response is JSON" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="Iteration data is present (data file attached)" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="Response contains customer data object" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="Created customer has a name" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="customer_name is correct" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="customer_type is correct" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="customer_group is correct" time="0.079" classname="03PostNewAuth"/>
+    <testcase name="territory is correct" time="0.079" classname="03PostNewAuth"/>
+  </testsuite>
+  <testsuite name="04 - Get Customer By Name" id="400d1ab2-c000-4d6f-bd83-99b7a58ffccb" timestamp="2026-10-07T08:32:39.030Z" tests="3" failures="0" errors="0" time="0.015">
+    <testcase name="Status code is 200" time="0.015" classname="04GetCustomerByName"/>
+    <testcase name="Response is JSON" time="0.015" classname="04GetCustomerByName"/>
+    <testcase name="Customer data is not null" time="0.015" classname="04GetCustomerByName"/>
+  </testsuite>
+  <testsuite name="05 - Update Customer" id="ad3397c7-6be3-4022-b9bc-9063040aebd4" timestamp="2026-10-07T08:32:39.030Z" tests="3" failures="0" errors="0" time="0.078">
+    <testcase name="Status code is 200" time="0.078" classname="05UpdateCustomer"/>
+    <testcase name="Response is JSON" time="0.078" classname="05UpdateCustomer"/>
+    <testcase name="Customer data is not null" time="0.078" classname="05UpdateCustomer"/>
+  </testsuite>
+  <testsuite name="06 - Delete Customer" id="5afa84f2-3554-46a5-831c-62ae6765b6ce" timestamp="2026-10-07T08:32:39.030Z" tests="2" failures="0" errors="0" time="0.198">
+    <testcase name="Status code is 202" time="0.198" classname="06DeleteCustomer"/>
+    <testcase name="Response is JSON" time="0.198" classname="06DeleteCustomer"/>
+  </testsuite>
+  <testsuite name="07 - Verify Deleted Customer" id="b1c0b0e1-e76e-4a27-99f3-04d88c6b50e5" timestamp="2026-10-07T08:32:39.030Z" tests="4" failures="0" errors="0" time="0.015">
+    <testcase name="createdCustomerName is set (did 03 succeed?)" time="0.015" classname="07VerifyDeletedCustomer"/>
+    <testcase name="Status code is 404" time="0.015" classname="07VerifyDeletedCustomer"/>
+    <testcase name="Response is JSON" time="0.015" classname="07VerifyDeletedCustomer"/>
+    <testcase name="Exception type is DoesNotExistError" time="0.015" classname="07VerifyDeletedCustomer"/>
+  </testsuite>
+  <testsuite name="08 - POST Customer Missing Required Field" id="d556c1e9-4341-4dae-acc1-be6f7a20d870" timestamp="2026-10-07T08:32:39.030Z" tests="3" failures="0" errors="0" time="0.030">
+    <testcase name="Status code is 500" time="0.030" classname="08PostCustomerMissingRequiredField"/>
+    <testcase name="Response is JSON" time="0.030" classname="08PostCustomerMissingRequiredField"/>
+    <testcase name="Exception type is AttributeError" time="0.030" classname="08PostCustomerMissingRequiredField"/>
+  </testsuite>
+  <testsuite name="09 - GET Customers Without Token" id="70b26d2f-110d-4f3c-a959-920e8bcbb211" timestamp="2026-10-07T08:32:39.030Z" tests="3" failures="0" errors="0" time="0.013">
+    <testcase name="Status code is 403" time="0.013" classname="09GetCustomersWithoutToken"/>
+    <testcase name="Response is JSON" time="0.013" classname="09GetCustomersWithoutToken"/>
+    <testcase name="Exception type is PermissionError" time="0.013" classname="09GetCustomersWithoutToken"/>
+  </testsuite>
+  <testsuite name="10 - GET Customers Invalid Token" id="3d9ec2b5-8af7-466f-8d60-23d7617a8abe" timestamp="2026-10-07T08:32:39.030Z" tests="3" failures="0" errors="0" time="0.015">
+    <testcase name="Status code is 401 or 403" time="0.015" classname="10GetCustomersInvalidToken"/>
+    <testcase name="Response is JSON" time="0.015" classname="10GetCustomersInvalidToken"/>
+    <testcase name="Response indicates an auth error" time="0.015" classname="10GetCustomersInvalidToken"/>
+  </testsuite>
+</testsuites>
