@@ -38,7 +38,13 @@ pipeline {
             }
         }
 
-        stage('Push Test Report to GitHub') {
+        stage('Generate Excel Report') {
+            steps {
+                bat 'node generate-excel-report.js'
+            }
+        }
+
+        stage('Push Test Reports to GitHub') {
             steps {
                 withCredentials([
                     usernamePassword(
@@ -52,6 +58,7 @@ pipeline {
                     git config user.email "jenkins@localhost"
 
                     git add -f reports/newman-results.xml
+                    git add -f reports/ERPNext-API-Test-Results.xlsx
 
                     git diff --cached --quiet
                     if errorlevel 1 (
@@ -71,7 +78,7 @@ pipeline {
             junit allowEmptyResults: true,
                   testResults: 'reports/newman-results.xml'
 
-            archiveArtifacts artifacts: 'reports/newman-results.xml',
+            archiveArtifacts artifacts: 'reports/newman-results.xml, reports/ERPNext-API-Test-Results.xlsx',
                              allowEmptyArchive: true
         }
     }
