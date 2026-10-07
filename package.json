@@ -1,0 +1,24 @@
+{
+  "name": "restapi_postman",
+  "version": "1.0.0",
+  "description": "ERPNext API automation using Postman, Newman and Jenkins",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Psanyu/ERPNext-Postman-Automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Psanyu/ERPNext-Postman-Automation/issues"
+  },
+  "homepage": "https://github.com/Psanyu/ERPNext-Postman-Automation#readme",
+  "devDependencies": {
+    "newman": "^6.2.2"
+  }
+}

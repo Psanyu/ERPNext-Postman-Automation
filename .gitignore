@@ -2,3 +2,5 @@ ERPNextQA.postman_environment.json
 node_modules/
 newman/
 *.html
+node_modules/
+reports/

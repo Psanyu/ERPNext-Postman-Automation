@@ -676,31 +676,31 @@
   "variable": [
     {
       "key": "customerName",
-      "value": ""
+      "value": "OAuth DD Customer 01"
     },
     {
       "key": "customerType",
-      "value": ""
+      "value": "Company"
     },
     {
       "key": "customerGroup",
-      "value": ""
+      "value": "Commercial"
     },
     {
       "key": "territory",
-      "value": ""
+      "value": "All Territories"
     },
     {
       "key": "updatedTerritory",
-      "value": ""
+      "value": "Canada"
     },
     {
       "key": "state",
-      "value": ""
+      "value": "47a69968-14fb-4831-b708-44690bc17b09"
     },
     {
       "key": "createdCustomerName",
-      "value": ""
+      "value": "OAuth DD Customer 01 - 14"
     }
   ]
 }
