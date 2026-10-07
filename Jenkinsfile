@@ -21,7 +21,6 @@ pipeline {
                     if not exist reports mkdir reports
 
                     npx newman run "ERPNext OAuth2 Practice.postman_collection.json" ^
-                      -e "ERPNextQA.postman_environment.json" ^
                       --env-var "baseUrl=http://localhost:8000" ^
                       --env-var "accessToken=%ERP_TOKEN%" ^
                       --folder "03 - POST New Auth" ^
